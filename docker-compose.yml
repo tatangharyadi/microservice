@@ -1,0 +1,54 @@
+version: '3.9'
+services:
+  microservice:
+    container_name: microservice
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbitmq
+      - mongorepl
+      - mongo
+    env_file:
+      - ./.env
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: secret
+
+  mongorepl:
+    container_name: mongorepl
+    image: mongo
+    depends_on:
+      - mongo
+    command:
+      [
+        'bash',
+        '-c',
+        'sleep 10 && mongo --host mongo:27017 --eval "rs.initiate()"',
+      ]
+    restart: 'no'
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    command: ['--replSet=dev']
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: microservice
+
+networks:
+  default:
+    name: dev
+    driver: bridge
