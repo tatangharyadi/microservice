@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   microservice:
     container_name: microservice
@@ -24,6 +25,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: secret
+      RABBITMQ_VM_MEMORY_HIGH_WATERMARK: 0.10
 
   mongorepl:
     container_name: mongorepl

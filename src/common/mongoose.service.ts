@@ -5,16 +5,16 @@ import { Model } from 'mongoose';
 export abstract class MongooseService {
     protected constructor(protected readonly model: Model<any>) {}
 
-    async save(createEntity) {
+    async save(createEntity): Promise<any> {
         const entity = new this.model(createEntity);
         return entity.save();
     }
 
-    find(filterQuery = {}) {
-        return this.model.find(filterQuery);
+    async find(filterQuery = {}): Promise<any[]> {
+        return this.model.find(filterQuery).exec();
     }
 
-    async findOne(id: string) {
+    async findOne(id: string): Promise<any> {
         const entity = await this.model.findOne({ _id: id }).exec();
 
         if (!entity) {
@@ -23,7 +23,7 @@ export abstract class MongooseService {
         return entity;
     }
 
-    async update(id: string, updateEntity) {
+    async update(id: string, updateEntity): Promise<any> {
         const existingEntity = await this.model
             .findOneAndUpdate(
                 { _id: id },
@@ -39,7 +39,7 @@ export abstract class MongooseService {
         return existingEntity;
     }
 
-    async delete(id: string) {
+    async delete(id: string): Promise<any> {
         const entity = await this.findOne(id);
         return entity.remove();
     }
