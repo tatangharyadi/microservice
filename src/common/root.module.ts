@@ -2,6 +2,7 @@ import * as Joi from '@hapi/joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { join } from 'path';
 
 @Module({
     imports: [
@@ -9,6 +10,8 @@ import { MongooseModule } from '@nestjs/mongoose';
             isGlobal: true,
             validationSchema: Joi.object({
                 MONGODB_URI: Joi.required(),
+                RABBITMQ_URL: Joi.required(),
+                QUEUE: Joi.required(),
             }),
         }),
         MongooseModule.forRootAsync({
