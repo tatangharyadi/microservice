@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
-//
+
 @Injectable()
 export abstract class MongooseService {
     protected constructor(protected readonly model: Model<any>) {}

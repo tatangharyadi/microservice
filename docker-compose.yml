@@ -1,5 +1,5 @@
 version: '3.9'
-#
+
 services:
   microservice:
     container_name: microservice
